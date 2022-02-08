@@ -7,7 +7,7 @@ El demo consiste en 4 contenedores con las siguientes características:
 - Container 1: (Postgres) Una base de datos.
 - Container 2: (Processing) Contenedor enfocado a realizar operaciones básicas.
 - Container 3: (Plot) Contenedor enfocado a crear boxplots sobre los datos generados.
-- Container 4: (Middelware) Contenedor encargado de interactuar entre el usuario y los servicios.
+- Container 4: (Middelware) Permite interactuar al usuario con los servicios.
 
 El diseño del demo queda de la siguiente manera:
 
@@ -40,7 +40,7 @@ Para poder ejcutar los contenedores se necesita el siguiente comando:
 
 Contenedor encargado de almacenar los datos generados por los usuarios (**NOTA:** se requiere ejecutar este contenedor primero que todos debido a que los demas dependen de la base de datos).
 
-Nombre del contenedor:
+Nombre de la imagen de contenedor:
 
 - postgres:latest
 
@@ -66,7 +66,7 @@ La tabla tiene el nombre de ciencias y se configura dentro del archivo `init.sql
 
 Contenedor encargado de generar las operaciones básicas sobre los datos almacenadoS dentro de la base de datos (*Container 1*) y retornar al usuario los valores obtenidos.
 
-Nombre del contenedor:
+Nombre de la imagen de contenedor:
 
 - jmorin98/processing:latest
 
@@ -109,11 +109,11 @@ Rutas que conforman este contenedor para ser utilizado:
 
 Contenedor encargado de generar y retornar la imagen de un boxplot correspondiente a cada columna de la base de datos.
 
-Nombre del contenedor:
+Nombre de la imagen de contenedor:
 
 - jmorin98/plot:latest
 
-Variables de entrono requeridas:
+Variables de entorno requeridas:
 
 - POSTGRES_USER
 - POSTGRES_DB
@@ -143,3 +143,14 @@ Rutas que conforman este contenedor para ser utilizado:
 | /api/v1/plot/z_operator  | GET     | Retorna boxplot de los valores de las operaciones básicas. |
 
 #### Container 4 - Middelware
+Se encarga de proporcionar acceso y unificacion de servicios distribuidos. Es conocido tambien como **Software glue**.
+
+Nombre de la imagen de contenedor:
+
+- nachocode/demo-middleware
+
+Variables de entorno:
+- MODE: Toma los valores de **DISTRIBUTED** o **LOCAL**
+- NODE_PORT: Puerto que se utiliza internamente dentro del entorno de docker.
+- NODE_HOST: Asignar variable de entorno a 0.0.0.0 para que el servidor escuche sobre cualquier interfaz de red.
+- DEBUG: Habilita el modo pruebas de Flask
